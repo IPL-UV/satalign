@@ -5,7 +5,7 @@ from typing import List, Optional, Tuple, Union
 
 import cv2
 import numpy as np
-
+import xarray as xr
 
 class SatSync(ABC):
     """
@@ -23,8 +23,8 @@ class SatSync(ABC):
 
     def __init__(
         self,
-        datacube: np.ndarray,
-        reference: np.ndarray,
+        datacube: Union[xr.DataArray, np.ndarray],
+        reference: Union[xr.DataArray, np.ndarray],
         channel: Union[int, str] = "mean",
         interpolation: int = cv2.INTER_LINEAR + cv2.WARP_FILL_OUTLIERS,
         crop_center: Optional[int] = None,
@@ -232,9 +232,40 @@ class SatSync(ABC):
 
         return warped_image, warp_matrix
 
-    def run(self) -> np.ndarray:
+    def run_xarray(self) -> xr.Dataset:
         """
-        Run sequantially the get_warped_image method
+        Run sequantially the get_warped_image method; input is xarray
+        """
+        # Create the reference feature using the reference image
+        reference_layer = self.create_layer(self.reference.values)
+
+        # Run iteratively the get_warped_image method
+        warp_matrices = []
+        warped_cube = np.zeros_like(self.datacube.values, dtype=self.datacube.dtype)
+        for index, img in enumerate(self.datacube.values):
+            # Obtain the warp matrix
+            warped_image, warp_matrix = self.get_warped_image(
+                reference_image=reference_layer,
+                moving_image=img.values,
+            )
+
+            # Save the warp matrix ... copy here makes cv2 happy
+            # weird bug that makes in the final list have the same values
+            # TODO: check in the future
+            warp_matrices.append(warp_matrix.copy())
+            warped_cube[index] = warped_image.copy()
+
+        # Create the xarray dataset
+        return xr.DataArray(
+            data=warped_cube,
+            coords=self.datacube.coords,
+            dims=self.datacube.dims,
+            attrs=self.datacube.attrs,
+        )
+
+    def run_numpy(self) -> np.ndarray:
+        """
+        Run sequantially the get_warped_image method; input is numpy
         """
 
         # Create the reference feature using the reference image
@@ -257,7 +288,7 @@ class SatSync(ABC):
 
         return warped_cube, warp_matrices
 
-    def run_multicore(self) -> np.ndarray:
+    def run_multicore_numpy(self) -> np.ndarray:
         """
         Run the get_warped_image method using multiple threads
         """
@@ -289,3 +320,62 @@ class SatSync(ABC):
                 warp_matrices.append(warp_matrix)
 
         return warped_cube, warp_matrices
+
+    def run_multicore_xarray(self) -> xr.Dataset:
+        """
+        Run the get_warped_image method using multiple threads
+        """
+
+        # Create the reference feature using the reference image
+        reference_layer = self.create_layer(self.reference.values)
+
+        # Create the executor
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self.num_threads
+        ) as executor:
+
+            futures = []
+            for index, img in enumerate(self.datacube.values):
+                futures.append(
+                    executor.submit(
+                        self.get_warped_image,
+                        reference_image=reference_layer,
+                        moving_image=img.values
+                    )
+                )
+
+            # Save the results in the final list
+            warped_cube = np.zeros_like(self.datacube.values, dtype=self.datacube.dtype)
+            warp_matrices = []
+            for index, future in enumerate(futures):
+                warped_image, warp_matrix = future.result()
+                warped_cube[index] = warped_image
+                warp_matrices.append(warp_matrix)
+
+        # Create the xarray dataset
+        return xr.DataArray(
+            data=warped_cube,
+            coords=self.datacube.coords,
+            dims=self.datacube.dims,
+            attrs=self.datacube.attrs,
+        )
+
+    def run(self) -> Union[xr.Dataset, np.ndarray]:
+        """
+        Run the alignment method
+        """
+
+        if isinstance(self.datacube, xr.DataArray):
+            return self.run_xarray()
+        else:
+            return self.run_numpy()
+        
+    def run_multicore(self) -> Union[xr.Dataset, np.ndarray]:
+        """
+        Run the alignment method using multiple threads
+        """
+
+        if isinstance(self.datacube, xr.DataArray):
+            return self.run_multicore_xarray()
+        else:
+            return self.run_multicore_numpy()
