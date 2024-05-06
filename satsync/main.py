@@ -245,8 +245,8 @@ class SatSync(ABC):
         for index, img in enumerate(self.datacube.values):
             # Obtain the warp matrix
             warped_image, warp_matrix = self.get_warped_image(
-                reference_image=reference_layer,
-                moving_image=img.values,
+                reference_image_feature=reference_layer,
+                moving_image=img,
             )
 
             # Save the warp matrix ... copy here makes cv2 happy
@@ -261,7 +261,7 @@ class SatSync(ABC):
             coords=self.datacube.coords,
             dims=self.datacube.dims,
             attrs=self.datacube.attrs,
-        )
+        ), warp_matrices
 
     def run_numpy(self) -> np.ndarray:
         """
@@ -277,7 +277,7 @@ class SatSync(ABC):
         for index, img in enumerate(self.datacube):
             # Obtain the warp matrix
             warped_image, warp_matrix = self.get_warped_image(
-                reference_image=reference_layer, moving_image=img
+                reference_image_feature=reference_layer, moving_image=img
             )
 
             # Save the warp matrix ... copy here makes cv2 happy
@@ -306,7 +306,7 @@ class SatSync(ABC):
                 futures.append(
                     executor.submit(
                         self.get_warped_image,
-                        reference_image=reference_layer,
+                        reference_image_feature=reference_layer,
                         moving_image=img,
                     )
                 )
@@ -339,8 +339,8 @@ class SatSync(ABC):
                 futures.append(
                     executor.submit(
                         self.get_warped_image,
-                        reference_image=reference_layer,
-                        moving_image=img.values
+                        reference_image_feature=reference_layer,
+                        moving_image=img
                     )
                 )
 
@@ -358,7 +358,7 @@ class SatSync(ABC):
             coords=self.datacube.coords,
             dims=self.datacube.dims,
             attrs=self.datacube.attrs,
-        )
+        ), warp_matrices
 
     def run(self) -> Union[xr.Dataset, np.ndarray]:
         """

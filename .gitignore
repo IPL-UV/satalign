@@ -167,3 +167,11 @@ cython_debug/
 #.idea/
 
 demo.py
+
+data1/
+
+datacube.pickle
+
+results2/
+
+animation1.gif

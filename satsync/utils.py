@@ -10,7 +10,6 @@ import pandas as pd
 import rasterio as rio
 import xarray as xr
 
-
 def create_array(
     path: Union[str, pathlib.Path],
     outdata: Union[str, pathlib.Path]
@@ -173,10 +172,10 @@ def plot_rgb(
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     axs[0].imshow(to_display1)
-    axs[0].set_title(f"Original Cube - {dates[index]}")
+    axs[0].set_title(f"Original Cube - {str(dates[index])}")
     axs[0].axis("off")
     axs[1].imshow(to_display2)
-    axs[1].set_title(f"Aligned Cube - {dates[index]}")
+    axs[1].set_title(f"Aligned Cube - {str(dates[index])}")
     axs[1].axis("off")
 
     return fig, axs
@@ -216,6 +215,9 @@ def plot_animation1(
     Returns:
         pathlib.Path: The path to the gif file.
     """
+    # check if the system has ImageMagick installed
+    if os.system("convert -version") != 0:
+        raise ValueError("You need to install ImageMagick to create the gif")
 
     # create folder is not exists
     png_output_folder = pathlib.Path(png_output_folder)
@@ -348,6 +350,9 @@ def plot_animation2(
         gif_delay (int, optional): The delay between the images. Defaults to 20.
         gif_loop (int, optional): The number of loops. Defaults to 0.    
     """
+    # check if the system has ImageMagick installed
+    if os.system("convert -version") != 0:
+        raise ValueError("You need to install ImageMagick to create the gif")
 
     # create folder is not exists
     png_output_folder = pathlib.Path(png_output_folder)
