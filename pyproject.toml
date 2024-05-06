@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "satsync"
 version = "0.0.6"
-description = "A python package to align satellite images."
+description = "Methods for spatial alignment of satellite imagery"
 authors = ["Cesar Aybar <fcesar.aybar@uv.es>"]
 repository = "https://github.com/csaybar/satsync"
 documentation = "https://csaybar.github.io/satsync/"
