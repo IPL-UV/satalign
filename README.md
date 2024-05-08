@@ -1,15 +1,15 @@
-# satsync
+# satalign
 
-[![Release](https://img.shields.io/github/v/release/csaybar/satsync)](https://img.shields.io/github/v/release/csaybar/satsync)
-[![Build status](https://img.shields.io/github/actions/workflow/status/csaybar/satsync/main.yml?branch=main)](https://github.com/csaybar/satsync/actions/workflows/main.yml?query=branch%3Amain)
-[![codecov](https://codecov.io/gh/csaybar/satsync/branch/main/graph/badge.svg)](https://codecov.io/gh/csaybar/satsync)
-[![Commit activity](https://img.shields.io/github/commit-activity/m/csaybar/satsync)](https://img.shields.io/github/commit-activity/m/csaybar/satsync)
-[![License](https://img.shields.io/github/license/csaybar/satsync)](https://img.shields.io/github/license/csaybar/satsync)
+[![Release](https://img.shields.io/github/v/release/csaybar/satalign)](https://img.shields.io/github/v/release/csaybar/satalign)
+[![Build status](https://img.shields.io/github/actions/workflow/status/csaybar/satalign/main.yml?branch=main)](https://github.com/csaybar/satalign/actions/workflows/main.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/csaybar/satalign/branch/main/graph/badge.svg)](https://codecov.io/gh/csaybar/satalign)
+[![Commit activity](https://img.shields.io/github/commit-activity/m/csaybar/satalign)](https://img.shields.io/github/commit-activity/m/csaybar/satalign)
+[![License](https://img.shields.io/github/license/csaybar/satalign)](https://img.shields.io/github/license/csaybar/satalign)
 
 A python package to align satellite images.
 
-- **Github repository**: <https://github.com/csaybar/satsync/>
-- **Documentation** <https://csaybar.github.io/satsync/>
+- **Github repository**: <https://github.com/csaybar/satalign/>
+- **Documentation** <https://csaybar.github.io/satalign/>
 
 ## Getting started with your project
 
@@ -19,7 +19,7 @@ First, create a repository on GitHub with the same name as this project, and the
 git init -b main
 git add .
 git commit -m "init commit"
-git remote add origin git@github.com:csaybar/satsync.git
+git remote add origin git@github.com:csaybar/satalign.git
 git push -u origin main
 ```
 
@@ -39,8 +39,8 @@ To enable the code coverage reports, see [here](https://fpgmaas.github.io/cookie
 ## Releasing a new version
 
 - Create an API Token on [Pypi](https://pypi.org/).
-- Add the API Token to your projects secrets with the name `PYPI_TOKEN` by visiting [this page](https://github.com/csaybar/satsync/settings/secrets/actions/new).
-- Create a [new release](https://github.com/csaybar/satsync/releases/new) on Github.
+- Add the API Token to your projects secrets with the name `PYPI_TOKEN` by visiting [this page](https://github.com/csaybar/satalign/settings/secrets/actions/new).
+- Create a [new release](https://github.com/csaybar/satalign/releases/new) on Github.
 - Create a new tag in the form `*.*.*`.
 
 For more details, see [here](https://fpgmaas.github.io/cookiecutter-poetry/features/cicd/#how-to-trigger-a-release).

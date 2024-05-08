@@ -4,10 +4,10 @@ from typing import List, Optional, Tuple, Union
 import numpy as np
 from skimage.registration import phase_cross_correlation
 
-from satsync.main import SatSync
+from satalign.main import SatAlign
 
 
-class PCC(SatSync):
+class PCC(SatAlign):
     def __init__(
         self,
         datacube: np.ndarray,

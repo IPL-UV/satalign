@@ -1,4 +1,4 @@
-from satsync.foo import foo
+from satalign.foo import foo
 
 
 def test_foo():

@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 import xarray as xr
 
-class SatSync(ABC):
+class SatAlign(ABC):
     """
     An abstract class for multi-temporal image co-registration
 

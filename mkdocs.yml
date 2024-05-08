@@ -1,10 +1,10 @@
-site_name: satsync
-repo_url: https://github.com/csaybar/satsync
-site_url: https://csaybar.github.io/satsync
+site_name: satalign
+repo_url: https://github.com/csaybar/satalign
+site_url: https://csaybar.github.io/satalign
 site_description: A python package to align satellite images.
 site_author: Cesar Aybar
 edit_uri: edit/main/docs/
-repo_name: csaybar/satsync
+repo_name: csaybar/satalign
 copyright: Maintained by <a href="https://csaybar.com">Florian</a>.
 
 nav:
@@ -43,9 +43,9 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/csaybar/satsync
+      link: https://github.com/csaybar/satalign
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/satsync
+      link: https://pypi.org/project/satalign
 
 markdown_extensions:
   - toc:

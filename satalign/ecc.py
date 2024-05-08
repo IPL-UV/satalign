@@ -15,10 +15,10 @@ from typing import List, Optional, Tuple, Union
 import cv2
 import numpy as np
 
-from satsync.main import SatSync
+from satalign.main import SatAlign
 
 
-class ECC(SatSync):
+class ECC(SatAlign):
     def __init__(
         self,
         datacube: np.ndarray,

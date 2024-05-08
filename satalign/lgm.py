@@ -4,13 +4,13 @@ from typing import List, Optional, Tuple, Union
 import numpy as np
 import torch
 
-from satsync.lightglue import (ALIKED, DISK, SIFT, DoGHardNet, LightGlue,
+from satalign.lightglue import (ALIKED, DISK, SIFT, DoGHardNet, LightGlue,
                                SuperPoint)
-from satsync.lightglue.utils import rbd
-from satsync.main import SatSync
+from satalign.lightglue.utils import rbd
+from satalign.main import SatAlign
 
 
-class LGM(SatSync):
+class LGM(SatAlign):
     def __init__(
         self,
         datacube: np.ndarray,

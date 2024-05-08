@@ -1,1 +1,1 @@
-::: satsync.foo
+::: satalign.foo
