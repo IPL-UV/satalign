@@ -131,8 +131,8 @@ def plot_s2_scatter(warp_df: pd.DataFrame) -> Tuple[plt.Figure, plt.Axes]:
     x2, y2 = warp_df[~warp_df["after"]]["x"], warp_df[~warp_df["after"]]["y"]
     
     # Build the scatter plot
-    ax.scatter(x1, y1, label="After", color="blue", alpha=0.5)
-    ax.scatter(x2, y2, label="Before", color="red", alpha=0.5)
+    ax.scatter(x1, y1, label="After Cutoff date", color="blue", alpha=0.5)
+    ax.scatter(x2, y2, label="Before  Cutoff date", color="red", alpha=0.5)
     ax.legend()
 
     return fig, ax
