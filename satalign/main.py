@@ -33,6 +33,7 @@ class SatAlign(ABC):
         num_threads: int = 4,
         max_translations: int = 5.0,
         border_value: int = 0,
+        warning_status: bool = False,
     ):
         """
 
@@ -71,6 +72,11 @@ class SatAlign(ABC):
             max_translations (int, optional): Estimated transformations are considered
                 incorrect when the norm of the translation component is larger than
                 this parameter. Defaults to 5.0.
+            border_value (int, optional): Value used to fill the border of the 
+                image when the warp matrix affects the border of the image. Defaults 
+                to 0.
+            warning_status (bool, optional): The warning status of the alignment
+                method. Defaults to False.
         """
 
         # Set the class attributes (REQUIRED)
@@ -90,6 +96,7 @@ class SatAlign(ABC):
         # We do no support homography for now (AUTOMATIC)
         self.warp_matrix_size = (2, 3)
         self.warp_matrix: np.ndarray = np.eye(*self.warp_matrix_size, dtype=np.float32)
+        self.warning_status = warning_status
 
     @abstractmethod
     def find_warp(
@@ -232,6 +239,7 @@ class SatAlign(ABC):
         if self.is_translation_large(warp_matrix):
             warnings.warn("Estimated translation is too large")
             warp_matrix = self.warp_matrix
+            self.warning_status = True
 
         # Warp the image using the estimated warp matrix
         warped_image = self.warp_feature(img=moving_image, warp_matrix=warp_matrix)

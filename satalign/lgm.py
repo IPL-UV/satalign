@@ -91,6 +91,7 @@ class LGM(SatAlign):
             feats0 = self.feature_model.extract(moving_image_torch, resize=None)
             if feats0["keypoints"].shape[1] == 0:
                 warnings.warn("No keypoints found in the moving image")
+                self.warning_status = True
                 return self.warp_matrix
 
         # Run the matcher model
@@ -109,6 +110,7 @@ class LGM(SatAlign):
 
         if thres.sum().item() == 0:
             warnings.warn("No matching points found")
+            self.warning_status = True
             return self.warp_matrix
 
         p0 = points0[thres]
