@@ -32,9 +32,14 @@ def create_array(
     s2_files = [f for _, f in sorted(zip(s2_dates, s2_files))]
     s2_dates.sort()
 
+    # check if the dates are unique
+    if len(s2_dates) != len(set(s2_dates)):
+        raise ValueError("The dates are not unique")
+
     # Create a data cube
     print("Creating data cube...")
     for file, date in zip(s2_files, s2_dates):
+        
         with rio.open(file) as src:
             data = src.read()
             if "s2_data" not in locals():
