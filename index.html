@@ -532,7 +532,16 @@
 </ul>
 <h2 id="installation">Installation ⚙️</h2>
 <p>Install the latest version from PyPI:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>satalign
+<p><div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>satalign
+</code></pre></div>
+To use the <code>PCC</code> module, you need to install additional dependencies:</p>
+<p><div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>satalign<span class="o">[</span>pcc<span class="o">]</span>
+</code></pre></div>
+Alternatively, if you already have satalign installed:</p>
+<p><div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>scikit-image
+</code></pre></div>
+To use the LGM module, you need to install additional dependencies:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>satalign<span class="o">[</span>deep<span class="o">]</span>
 </code></pre></div>
 <h2 id="how-to-use">How to use 🛠️</h2>
 <h3 id="align-an-eeimagecollection-with-satalignpccpcc">Align an ee.ImageCollection with <code>satalign.pcc.PCC</code> 🌍</h3>
@@ -541,13 +550,12 @@
 <span class="kn">import</span> <span class="nn">fastcubo</span>
 <span class="kn">import</span> <span class="nn">satalign</span>
 <span class="kn">import</span> <span class="nn">satalign.pcc</span>
-<span class="kn">import</span> <span class="nn">satalign.ecc</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
 </code></pre></div>
 <h4 id="auth-and-init-gee">Auth and Init GEE</h4>
 <div class="highlight"><pre><span></span><code><span class="c1"># Initialize depending on the environment</span>
-<span class="n">ee</span><span class="o">.</span><span class="n">Autenticate</span><span class="p">()</span>
+<span class="n">ee</span><span class="o">.</span><span class="n">Authenticate</span><span class="p">()</span>
 <span class="n">ee</span><span class="o">.</span><span class="n">Initialize</span><span class="p">(</span><span class="n">opt_url</span><span class="o">=</span><span class="s2">&quot;https://earthengine-highvolume.googleapis.com&quot;</span><span class="p">)</span> <span class="c1"># project = &quot;name&quot;</span>
 </code></pre></div>
 <h4 id="dataset">Dataset</h4>
@@ -623,8 +631,11 @@
   <img src="https://huggingface.co/datasets/JulioContrerasH/DataMLSTAC/resolve/main/s2animation1.gif" width="100%">
 </p>
 
+<p>Here's an addition to clarify that <code>datacube</code> and <code>reference_image</code> have already been defined:</p>
 <h3 id="align-an-image-collection-with-sataligneececc">Align an Image Collection with <code>satalign.eec.ECC</code> 📚</h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Initialize the ECC model</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">satalign.ecc</span>
+
+<span class="c1"># Initialize the ECC model</span>
 <span class="n">ecc_model</span> <span class="o">=</span> <span class="n">satalign</span><span class="o">.</span><span class="n">ecc</span><span class="o">.</span><span class="n">ECC</span><span class="p">(</span>
     <span class="n">datacube</span><span class="o">=</span><span class="n">s2_datacube</span><span class="p">,</span> 
     <span class="n">reference</span><span class="o">=</span><span class="n">reference_image</span><span class="p">,</span>
@@ -634,10 +645,13 @@
 <span class="n">aligned_cube</span><span class="p">,</span> <span class="n">warp_matrices</span> <span class="o">=</span> <span class="n">ecc_model</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
 <h3 id="align-using-local-features-with-satalignlgmlgm">Align using Local Features with <code>satalign.lgm.LGM</code> 🧮</h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># Initialize the LGM model</span>
+<p>Here's the updated version with a note about using floating-point values or scaling:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">satalign.lgm</span>
+
+<span class="c1"># Initialize the LGM model</span>
 <span class="n">lgm_model</span> <span class="o">=</span> <span class="n">satalign</span><span class="o">.</span><span class="n">lgm</span><span class="o">.</span><span class="n">LGM</span><span class="p">(</span>
-    <span class="n">datacube</span><span class="o">=</span><span class="n">datacube</span><span class="p">,</span> 
-    <span class="n">reference</span><span class="o">=</span><span class="n">reference_image</span><span class="p">,</span> 
+    <span class="n">datacube</span><span class="o">=</span><span class="n">datacube</span> <span class="o">/</span> <span class="mi">10_000</span><span class="p">,</span> 
+    <span class="n">reference</span><span class="o">=</span><span class="n">reference_image</span> <span class="o">/</span> <span class="mi">10_000</span><span class="p">,</span> 
     <span class="n">feature_model</span><span class="o">=</span><span class="s2">&quot;superpoint&quot;</span><span class="p">,</span>
     <span class="n">matcher_model</span><span class="o">=</span><span class="s2">&quot;lightglue&quot;</span><span class="p">,</span>
 <span class="p">)</span>
