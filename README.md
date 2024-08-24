@@ -44,13 +44,26 @@
 ## Installation ⚙️
 Install the latest version from PyPI:
 
-
 ```bash
 pip install satalign
 ```
+To use the `PCC` module, you need to install additional dependencies:
+
+```bash
+pip install satalign[pcc]
+```
+Alternatively, if you already have satalign installed:
+
+```bash
+pip install scikit-image
+```
+To use the LGM module, you need to install additional dependencies:
+
+```bash
+pip install satalign[deep]
+```
 
 ## How to use 🛠️
-
 
 ### Align an ee.ImageCollection with `satalign.pcc.PCC` 🌍
 
@@ -61,7 +74,6 @@ import ee
 import fastcubo
 import satalign
 import satalign.pcc
-import satalign.ecc
 import matplotlib.pyplot as plt
 from IPython.display import Image, display
 ```
@@ -70,7 +82,7 @@ from IPython.display import Image, display
 
 ```python
 # Initialize depending on the environment
-ee.Autenticate()
+ee.Authenticate()
 ee.Initialize(opt_url="https://earthengine-highvolume.googleapis.com") # project = "name"
 ```
 #### Dataset
@@ -152,9 +164,13 @@ display(Image(filename='animation1.gif'))
   <img src="https://huggingface.co/datasets/JulioContrerasH/DataMLSTAC/resolve/main/s2animation1.gif" width="100%">
 </p>
 
+Here's an addition to clarify that `datacube` and `reference_image` have already been defined:
+
 ### Align an Image Collection with `satalign.eec.ECC` 📚
 
 ```python
+import satalign.ecc
+
 # Initialize the ECC model
 ecc_model = satalign.ecc.ECC(
     datacube=s2_datacube, 
@@ -166,11 +182,15 @@ aligned_cube, warp_matrices = ecc_model.run()
 ```
 ### Align using Local Features with `satalign.lgm.LGM` 🧮
 
+Here's the updated version with a note about using floating-point values or scaling:
+
 ```python
+import satalign.lgm
+
 # Initialize the LGM model
 lgm_model = satalign.lgm.LGM(
-    datacube=datacube, 
-    reference=reference_image, 
+    datacube=datacube / 10_000, 
+    reference=reference_image / 10_000, 
     feature_model="superpoint",
     matcher_model="lightglue",
 )

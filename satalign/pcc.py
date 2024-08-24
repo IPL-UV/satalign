@@ -1,6 +1,7 @@
 import warnings
 from typing import List, Optional, Tuple, Union
 
+import xarray as xr
 import numpy as np
 from skimage.registration import phase_cross_correlation
 
@@ -10,8 +11,8 @@ from satalign.main import SatAlign
 class PCC(SatAlign):
     def __init__(
         self,
-        datacube: np.ndarray,
-        reference: np.ndarray,
+        datacube: Union[np.ndarray, xr.DataArray],
+        reference: Union[np.ndarray, xr.DataArray],
         upsample_factor: Optional[int] = 50,
         space: Optional[str] = "real",
         disambiguate: Optional[bool] = False,
@@ -19,13 +20,13 @@ class PCC(SatAlign):
         **kwargs,
     ):
         """
-
         Args:
-            datacube (xr.DataArray): The data cube to be aligned. The data cube
-                needs to have the following dimensions: (time, bands, height, width).
-            reference (Optional[xr.DataArray], optional): The reference image.
-                The reference image needs to have the following dimensions:
-                (bands, height, width).
+            datacube (Union[np.ndarray, xr.DataArray]): Data cube to align with 
+                dimensions (time, bands, height, width). Ensure values are 
+                floats; if not, divide by 10,000.
+            reference (Union[np.ndarray, xr.DataArray]): Reference image with 
+                dimensions (bands, height, width). Ensure values are floats; 
+                if not, divide by 10,000.
             upsample_factor (Optional[int], optional): Upsampling factor. Images will
                 be registered to within ``1 / upsample_factor`` of a pixel. For example
                 ``upsample_factor == 20`` means the images will be registered within 1/20th

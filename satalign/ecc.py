@@ -14,6 +14,7 @@ from typing import List, Optional, Tuple, Union
 
 import cv2
 import numpy as np
+import xarray as xr
 
 from satalign.main import SatAlign
 
@@ -21,20 +22,20 @@ from satalign.main import SatAlign
 class ECC(SatAlign):
     def __init__(
         self,
-        datacube: np.ndarray,
-        reference: np.ndarray,
+        datacube: Union[np.ndarray, xr.DataArray],
+        reference: Union[np.ndarray, xr.DataArray],
         criteria: Tuple[int, int, float] = (cv2.TERM_CRITERIA_COUNT, 100, 0),
         gauss_kernel_size: int = 3,
         **kwargs,
     ):
         """
-
         Args:
-            datacube (xr.DataArray): The data cube to be aligned. The data cube
-                needs to have the following dimensions: (time, bands, height, width).
-            reference (Optional[xr.DataArray], optional): The reference image.
-                The reference image needs to have the following dimensions:
-                (bands, height, width).
+            datacube (Union[np.ndarray, xr.DataArray]): Data cube to align with 
+                dimensions (time, bands, height, width). Ensure values are 
+                floats; if not, divide by 10,000.
+            reference (Union[np.ndarray, xr.DataArray]): Reference image with 
+                dimensions (bands, height, width). Ensure values are floats; 
+                if not, divide by 10,000.
             criteria (Tuple[int, int, float], optional): The strategy for the termination
                 of the iterative search algorithm. The cv2.TERM_CRITERIA_COUNT indicates
                 that the algorithm should terminate after a certain number of iterations.

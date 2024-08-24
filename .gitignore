@@ -169,6 +169,7 @@ cython_debug/
 demo.py
 
 data1/
+dist/
 
 datacube.pickle
 

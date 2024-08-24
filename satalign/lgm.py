@@ -1,6 +1,7 @@
 import warnings
 from typing import List, Optional, Tuple, Union
 
+import xarray as xr
 import numpy as np
 import torch
 
@@ -13,8 +14,8 @@ from satalign.main import SatAlign
 class LGM(SatAlign):
     def __init__(
         self,
-        datacube: np.ndarray,
-        reference: np.ndarray,
+        datacube: Union[np.ndarray, xr.DataArray],
+        reference: Union[np.ndarray, xr.DataArray],
         feature_model: str = "superpoint",
         matcher_model: str = "lightglue",
         max_num_keypoints: int = 2048,
@@ -22,13 +23,13 @@ class LGM(SatAlign):
         **kwargs,
     ):
         """
-
         Args:
-            datacube (xr.DataArray): The data cube to be aligned. The data cube
-                needs to have the following dimensions: (time, bands, height, width).
-            reference (Optional[xr.DataArray], optional): The reference image.
-                The reference image needs to have the following dimensions:
-                (bands, height, width).
+            datacube (Union[np.ndarray, xr.DataArray]): Data cube to align with 
+                dimensions (time, bands, height, width). Ensure values are 
+                floats; if not, divide by 10,000.
+            reference (Union[np.ndarray, xr.DataArray]): Reference image with 
+                dimensions (bands, height, width). Ensure values are floats; 
+                if not, divide by 10,000.
             feature_model (str, optional): The feature extractor model. Defaults to
                 'superpoint'. Options are: 'superpoint'. Options are: 'superpoint',
                 'disk', 'sift', 'aliked', 'doghardnet'.
@@ -190,7 +191,11 @@ class LGM(SatAlign):
         """
 
         # Create the reference layer (H x W) to torch
-        reference_layer = self.create_layer(img=self.reference[self.rgb_bands])
+        if isinstance(self.reference, xr.DataArray):
+            reference_layer = self.create_layer(img=self.reference.values)
+        else:
+            reference_layer = self.create_layer(img=self.reference)
+
         reference_layer_torch = (
             torch.from_numpy(reference_layer).float()[None].to(self.device)
         )
