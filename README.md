@@ -52,118 +52,128 @@ pip install satalign
 ## How to use 🛠️
 
 
-### Align an ee.ImageCollection with `satalign.PCC` 🌍
+### Align an ee.ImageCollection with `satalign.pcc.PCC` 🌍
+
+#### Load libraries
 
 ```python
-import fastcubo
 import ee
+import fastcubo
 import satalign
+import satalign.pcc
+import satalign.ecc
+import matplotlib.pyplot as plt
+from IPython.display import Image, display
+```
 
-ee.Initialize(opt_url="https://earthengine-highvolume.googleapis.com")
+#### Auth and Init GEE
 
-# Download an image collection
+```python
+# Initialize depending on the environment
+ee.Autenticate()
+ee.Initialize(opt_url="https://earthengine-highvolume.googleapis.com") # project = "name"
+```
+#### Dataset
+```python
+# Download image collection
 table = fastcubo.query_getPixels_imagecollection(
     point=(-75.71260, -14.18835),
     collection="COPERNICUS/S2_HARMONIZED",
     bands=["B2", "B3", "B4", "B8"],
-    data_range=["2018-01-01", "2024-12-31"],
-    edge_size=256, 
-    resolution=10, 
+    data_range=["2023-12-01", "2023-12-31"],
+    edge_size=256,
+    resolution=10,
 )
+fastcubo.getPixels(table, nworkers=4, output_path="output")
+```
+#### Align dataset
+```python
+# Create a data cube and select images if desired
+s2_datacube = satalign.utils.create_array("output", "datacube.pickle")
 
-fastcubo.getPixels(table, nworkers=10, output_path="output/aligned_images/s2")
+# Define reference image
+reference_image = s2_datacube.sel(time=s2_datacube.time > "2022-08-03").mean("time")
 
-# Create the data cube
-s2_datacube = satalign.utils.create_array("output/aligned_images/s2", "output/datacube_pcc.pickle")
-
-# Define the reference image
-reference_image = s2_datacube.sel(time=s2_datacube.time > "2024-01-03").mean("time")
-
-# Initialize the PCC model
-pcc_model = satalign.PCC(
-    datacube=s2_datacube, # T x C x H x W
-    reference=reference_image, # C x H x W
+# Initialize and run PCC model
+pcc_model = satalign.pcc.PCC(
+    datacube=s2_datacube,
+    reference=reference_image,
     channel="mean",
     crop_center=128,
     num_threads=2,
 )
-
-# Run the alignment on multiple cores
+# Run the alignment
 aligned_cube, warp_matrices = pcc_model.run_multicore()
 
+# Display the warped cube
+warp_df = satalign.utils.warp2df(warp_matrices, s2_datacube.time.values)
+satalign.utils.plot_s2_scatter(warp_df)
+plt.show()
 ```
+<p align="center">
+  <img src="https://huggingface.co/datasets/JulioContrerasH/DataMLSTAC/resolve/main/warped_cube.png" width="60%">
+</p>
 
-### Align an Image Collection with `satalign.ECC` 📚
+
+#### Graphics
 
 ```python
-import fastcubo
-import ee
-import satalign
-
-ee.Initialize(opt_url="https://earthengine-highvolume.googleapis.com")
-
-# Download an image collection
-table = fastcubo.query_getPixels_imagecollection(
-    point=(51.079225, 10.452173),
-    collection="COPERNICUS/S2_HARMONIZED",
-    bands=["B4", "B3", "B2"],
-    data_range=["2016-06-01", "2017-07-01"],
-    edge_size=128,
-    resolution=10,
+# Display profiles
+satalign.utils.plot_profile(
+    warped_cube=aligned_cube.values,
+    raw_cube=s2_datacube.values,
+    x_axis=3,
+    rgb_band=[3, 2, 1],
+    intensity_factor=1/3000,
 )
+plt.show()
+```
+<p align="center">
+  <img src="https://huggingface.co/datasets/JulioContrerasH/DataMLSTAC/resolve/main/profile.png" width="100%">
+</p>
 
-fastcubo.getPixels(table, nworkers=4, output_path="output/aligned_images/ecc")
+```python
+# Create PNGs and GIF
+# Note: The following part requires a Linux environment
+# !apt-get install imagemagick
+gifspath = satalign.utils.plot_animation1(
+    warped_cube=aligned_cube[0:50].values,
+    raw_cube=s2_datacube[0:50].values,
+    dates=s2_datacube.time[0:50].values,
+    rgb_band=[3, 2, 1],
+    intensity_factor=1/3000,
+    png_output_folder="./output_png",
+    gif_delay=20,
+    gif_output_file="./animation1.gif",
+)
+display(Image(filename='animation1.gif'))
+```
+<p align="center">
+  <img src="https://huggingface.co/datasets/JulioContrerasH/DataMLSTAC/resolve/main/s2animation1.gif" width="100%">
+</p>
 
-# Create the data cube
-s2_datacube = satalign.utils.create_array("output/aligned_images/ecc", "output/datacube_ecc.pickle")
+### Align an Image Collection with `satalign.eec.ECC` 📚
 
-# Define the reference image
-reference_image = s2_datacube.isel(time=0)
-
+```python
 # Initialize the ECC model
-ecc_model = satalign.ECC(
+ecc_model = satalign.ecc.ECC(
     datacube=s2_datacube, 
     reference=reference_image,
-    gauss_kernel_size=3,
+    gauss_kernel_size=5,
 )
-
 # Run the alignment
 aligned_cube, warp_matrices = ecc_model.run()
 ```
-### Align using Local Features with `satalign.LGM` 🧮
+### Align using Local Features with `satalign.lgm.LGM` 🧮
 
 ```python
-import fastcubo
-import ee
-import satalign
-
-ee.Initialize(opt_url="https://earthengine-highvolume.googleapis.com")
-
-# Download an image collection
-table = fastcubo.query_getPixels_imagecollection(
-    point=(-76.5, -9.5),
-    collection="NASA/NASADEM_HGT/001",
-    bands=["elevation"],
-    edge_size=128,
-    resolution=90
-)
-
-fastcubo.getPixels(table, nworkers=4, output_path="output/aligned_images/lgm")
-
-# Create the data cube
-datacube = satalign.utils.create_array("output/aligned_images/lgm", "output/datacube_lgm.pickle")
-
-# Define the reference image
-reference_image = datacube.isel(time=0)
-
 # Initialize the LGM model
-lgm_model = satalign.LGM(
+lgm_model = satalign.lgm.LGM(
     datacube=datacube, 
     reference=reference_image, 
     feature_model="superpoint",
     matcher_model="lightglue",
 )
-
 # Run the alignment
 aligned_cube, warp_matrices = lgm_model.run()
 ```
