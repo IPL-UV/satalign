@@ -39,7 +39,7 @@ class ECC(SatAlign):
                 of the iterative search algorithm. The cv2.TERM_CRITERIA_COUNT indicates
                 that the algorithm should terminate after a certain number of iterations.
             gauss_kernel_size (int, optional): The size of the Gaussian kernel used to
-                smooth the images before calculating the warp matrix. Defaults to 1.
+                smooth the images before calculating the warp matrix. Defaults to 3.
             **kwargs: Additional keyword arguments. See the `SatSync` class for more
                 information.
         """
