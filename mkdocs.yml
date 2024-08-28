@@ -3,9 +3,8 @@ docs_dir: .
 # Project information
 site_name: Satalign
 site_url: https://ipl-uv.github.io/satalign/
-site_author: AndesDataCube Project
+site_author: IPL-UV Project
 site_description: Satalign is a Python library for the alignment of satellite images using deep learning models.
-
 
 # Repository
 repo_url: https://github.com/IPL-UV/satalign
@@ -33,7 +32,7 @@ theme:
     text: Roboto
     code: Roboto Mono
   logo: https://huggingface.co/datasets/JulioContrerasH/DataMLSTAC/resolve/main/logo_satalign.png
-  favicon: resources/ms_icon.png
+  favicon: https://huggingface.co/datasets/JulioContrerasH/DataMLSTAC/resolve/main/logo_satalign.png
   features:
     - navigation.instant
     - navigation.tabs

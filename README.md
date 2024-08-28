@@ -31,17 +31,17 @@
 
 ---
 
-## Overview 📊
+## **Overview** 📊
 
-**Satalign** is a Python package designed for efficient multi-temporal image co-registration. It enables aligning temporal data cubes with reference images using advanced techniques such as Phase Cross-Correlation (PCC), Enhanced Cross-Correlation (ECC), and Local Features Matching (LGM). This package facilitates the manipulation and processing of large volumes of Earth observation data efficiently.
+**Satalign** is a Python package designed for efficient multi-temporal image co-registration. It enables aligning temporal data cubes with reference images using advanced techniques such as Phase Cross-Correlation (PCC), Enhanced Cross-Correlation (ECC), and Local Geometric Matching (LGM). This package facilitates the manipulation and processing of large volumes of Earth observation data efficiently.
 
-## Key features ✨
+## **Key features** ✨
 - **Advanced alignment algorithms**: Leverages ECC, PCC, and LGM to accurately align multi-temporal images. 🔍
 - **Efficient data cube management**: Processes large data cubes with memory and processing optimizations. 🧩
 - **Support for local feature models**: Utilizes models like SuperPoint, SIFT, and more for keypoint matching. 🖥️
 - **Parallelization**: Executes alignment processes across multiple cores for faster processing. 🚀
 
-## Installation ⚙️
+## **Installation** ⚙️
 Install the latest version from PyPI:
 
 ```bash
@@ -57,17 +57,17 @@ Alternatively, if you already have satalign installed:
 ```bash
 pip install scikit-image
 ```
-To use the LGM module, you need to install additional dependencies:
+To use the `LGM` module, you need to install additional dependencies:
 
 ```bash
 pip install satalign[deep]
 ```
 
-## How to use 🛠️
+## **How to use** 🛠️
 
-### Align an ee.ImageCollection with `satalign.pcc.PCC` 🌍
+### **Align an ee.ImageCollection with `satalign.pcc.PCC`** 🌍
 
-#### Load libraries
+#### **Load libraries**
 
 ```python
 import ee
@@ -78,14 +78,14 @@ import matplotlib.pyplot as plt
 from IPython.display import Image, display
 ```
 
-#### Auth and Init GEE
+#### **Auth and Init GEE**
 
 ```python
 # Initialize depending on the environment
 ee.Authenticate()
 ee.Initialize(opt_url="https://earthengine-highvolume.googleapis.com") # project = "name"
 ```
-#### Dataset
+#### **Dataset**
 ```python
 # Download image collection
 table = fastcubo.query_getPixels_imagecollection(
@@ -98,7 +98,7 @@ table = fastcubo.query_getPixels_imagecollection(
 )
 fastcubo.getPixels(table, nworkers=4, output_path="output")
 ```
-#### Align dataset
+#### **Align dataset**
 ```python
 # Create a data cube and select images if desired
 s2_datacube = satalign.utils.create_array("output", "datacube.pickle")
@@ -127,7 +127,7 @@ plt.show()
 </p>
 
 
-#### Graphics
+#### **Graphics**
 
 ```python
 # Display profiles
@@ -166,7 +166,7 @@ display(Image(filename='animation1.gif'))
 
 Here's an addition to clarify that `datacube` and `reference_image` have already been defined:
 
-### Align an Image Collection with `satalign.eec.ECC` 📚
+### **Align an Image Collection with `satalign.eec.ECC`** 📚
 
 ```python
 import satalign.ecc
@@ -180,7 +180,7 @@ ecc_model = satalign.ecc.ECC(
 # Run the alignment
 aligned_cube, warp_matrices = ecc_model.run()
 ```
-### Align using Local Features with `satalign.lgm.LGM` 🧮
+### **Align using Local Features with `satalign.lgm.LGM`** 🧮
 
 Here's the updated version with a note about using floating-point values or scaling:
 
