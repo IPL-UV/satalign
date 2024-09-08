@@ -48,32 +48,6 @@ nav:
     - Contributing: CONTRIBUTING.md
     - Changelog: CHANGELOG.md
     - Code of conduct: CODE_OF_CONDUCT.md
-  # - Tasks: 
-  #   - ./mlstac/collection/tasks/README.md
-  #   - Remote Sensing:
-  #     - Tensor Classification: ./mlstac/collection/tasks/TensorClassification.md
-  #     - Tensor Regression: ./mlstac/collection/tasks/TensorRegression.md
-  #     - Tensor Object Detection: ./mlstac/collection/tasks/TensorObjectDetection.md
-  #     - Tensor Segmentation: ./mlstac/collection/tasks/TensorSegmentation.md
-  #     - Tensor to Tensor: ./mlstac/collection/tasks/TensorToTensor.md
-    
-  #   - Multimodal:
-  #     - Tensor to Text: ./mlstac/collection/tasks/TensorToText.md
-  #     - Text to Tensor: ./mlstac/collection/tasks/TextToTensor.md
-  # - Sample: 
-  #   - ./mlstac/sample/README.md
-  #   - Specification: ./mlstac/sample/specification.md
-  #   - Safetensor: ./mlstac/sample/safetensor.md
-  #   - Schema: ./mlstac/sample/squema.md
-  # # - Catalog:
-  # #   - ./mlstac/catalog/README.md
-  # #   - Specification: ./mlstac/catalog/specification.md
-  # #   - Squema: ./mlstac/catalog/squema.md
-  # - Collection:
-  #   - ./mlstac/collection/README.md
-  #   - Specification: ./mlstac/collection/specification.md
-  #   - Schema: ./mlstac/collection/squema.md
-  # - API: ./mlstac/api/README.md
 
 # Plugins
 plugins:
@@ -91,3 +65,11 @@ markdown_extensions:
   - pymdownx.tabbed
   - mdx_truly_sane_lists
   - pymdownx.tasklist
+
+# Extra CSS
+extra_css:
+  - docs/style/style.css
+
+# Extra JavaScript
+extra_javascript:
+  - docs/js/copybutton.js
