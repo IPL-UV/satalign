@@ -1,7 +1,7 @@
 # 
 
 <p align="center">
-  <img src="https://huggingface.co/datasets/JulioContrerasH/DataMLSTAC/resolve/main/banner_satalign.png" width="40%">
+  <img src="https://huggingface.co/datasets/JulioContrerasH/DataMLSTAC/resolve/main/banner_satalign.png" width="45%">
 </p>
 
 <p align="center">
