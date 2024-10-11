@@ -268,6 +268,8 @@ def plot_profile(
     y_axis: Union[int, slice, None] = None,
     rgb_band: Union[int, list, None] = [3, 2, 1],
     intensity_factor: int = 3,
+    figsize: Tuple[float] = (10,5),
+    **kwargs: dict,
 ) -> Tuple[plt.Figure, plt.Axes]:
     """Display the profile of the cube at a given point
 
@@ -281,7 +283,9 @@ def plot_profile(
         rgb_band (Union[int, list, None], optional): The RGB bands to use.
             Defaults to [3, 2, 1].
         intensity_factor (int, optional): The intensity factor, used to scale
-        the pixel values. Defaults to 3.
+            the pixel values. Defaults to 3.
+        figsize (tuple(float), optional): figsize parameter to plt.subplots
+        **kwargs (dict, optional): Extra parameters to plt.subplots
     """
     t1, c1, h1, w1 = warped_cube.shape
     t2, c2, h2, w2 = raw_cube.shape
@@ -309,7 +313,7 @@ def plot_profile(
     to_display1 = (temporal_profile1 * intensity_factor).clip(0, 1)
     to_display2 = (temporal_profile2 * intensity_factor).clip(0, 1)
 
-    fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+    fig, axs = plt.subplots(1, 2, figsize=figsize, **kwargs)
     axs[0].imshow(to_display1)
     axs[0].set_title("Original Cube")
     axs[0].set_ylabel("Time")

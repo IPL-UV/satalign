@@ -123,7 +123,7 @@ class LGM(SatAlign):
         warp_matrix = np.eye(*self.warp_matrix_size, dtype=np.float32)
         warp_matrix[:2, 2] = [translation_x.item(), translation_y.item()]
 
-        return warp_matrix
+        return warp_matrix, None
 
     def spatial_setup_model(
         self,
