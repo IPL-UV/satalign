@@ -271,7 +271,8 @@ def plot_profile(
     figsize: Tuple[float] = (10,5),
     **kwargs: dict,
 ) -> Tuple[plt.Figure, plt.Axes]:
-    """Display the profile of the cube at a given point
+    """
+    Display the profile of the cube at a given point
 
     Args:
         warped_cube (np.ndarray): The aligned cube
