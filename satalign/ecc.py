@@ -83,4 +83,4 @@ class ECC(SatAlign):
             warnings.warn(f"Could not calculate the warp matrix: {cv2err}")
             warp_matrix = np.eye(*self.warp_matrix_size, dtype=np.float32)
             self.warning_status = True
-        return warp_matrix
+        return warp_matrix, None

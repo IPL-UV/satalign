@@ -96,4 +96,4 @@ class PCC(SatAlign):
             warp_matrix = np.eye(*self.warp_matrix_size, dtype=np.float32)
             self.warning_status = True
 
-        return warp_matrix
+        return warp_matrix, error
